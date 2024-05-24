@@ -9,10 +9,10 @@ namespace TournamentAPI.Data.Repositories;
 public interface ITournamentRepository {
     Task<IEnumerable<Tournament>> GetAllAsync();
     Task<OneOf<Tournament, NotFound>> GetAsync(int id);
-    Task<bool> AnyAsync(int id); 
-    void Add(Tournament tournament); 
-    void Update(Tournament tournament); 
-    void Remove(Tournament tournament); 
+    Task<bool> AnyAsync(int id);
+    Task Add(Tournament tournament);
+    Task<OneOf<Tournament, NotFound>> Update(Tournament tournament);
+    Task<OneOf<Tournament, NotFound>> Remove(int id);
 }
 
 
@@ -40,19 +40,34 @@ public class TournamentRepository : ITournamentRepository {
         return item; 
     }
 
-    public Task<bool> AnyAsync(int id) {
-        throw new NotImplementedException();
+    public async Task<bool> AnyAsync(int id) {
+        var result = await _context.Tournaments.AnyAsync(t => t.TournamentId == id);
+
+        return result; 
     }
 
-    public void Add(Tournament tournament) {
-        throw new NotImplementedException();
+    public async Task Add(Tournament tournament) {
+        await _context.Tournaments.AddAsync(tournament);
     }
 
-    public void Update(Tournament tournament) {
-        throw new NotImplementedException();
+    public async Task<OneOf<Tournament, NotFound>> Update(Tournament tournament) {
+        var found = await _context.Tournaments
+            .FirstOrDefaultAsync(t => t.TournamentId == tournament.TournamentId);
+
+        if (found == null) return new NotFound();
+
+        var updated = _context.Tournaments.Update(tournament).Entity;
+
+        return updated; 
     }
 
-    public void Remove(Tournament tournament) {
-        throw new NotImplementedException();
+    public async Task<OneOf<Tournament, NotFound>> Remove(int id) {
+        var found = await _context.Tournaments
+            .FirstOrDefaultAsync(t => t.TournamentId == id);
+
+        if (found == null) return new NotFound();
+
+        _context.Tournaments.Remove(found);
+        return found; 
     }
 }

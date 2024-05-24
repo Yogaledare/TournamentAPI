@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TournamentAPI.Data.Repositories;
+using TournamentAPI.Dto;
 using TournamentAPI.Mappers;
 
 
@@ -27,13 +28,52 @@ public static class TournamentEndpoint {
 
             return result.Match(
                 t => Results.Ok(mapper.Tournament_TournamentDto(t)),
-                n => Results.NotFound($"Could not find id {id}")
+                n => Results.NotFound($"Could not find tournament with id {id}")
             );
-
         });
-        
-        
-        
+
+        app.MapPost("/tournaments", async (
+            CreateTournamentDto dto,
+            IUoW uow,
+            ITournamentApiMapper mapper
+        ) => {
+            var tournament = mapper.CreateTournamentDto_Tournament(dto);
+            await uow.TournamentRepository.Add(tournament);
+            await uow.CompleteAsync();
+            
+            return Results.Created($"/tournaments/{tournament.TournamentId}", mapper.Tournament_TournamentDto(tournament));
+        });
+
+
+        app.MapPut("/tournaments/{id}", async (
+            int id,
+            CreateTournamentDto dto,
+            IUoW uow,
+            ITournamentApiMapper mapper
+        ) => {
+            var tournament = mapper.CreateTournamentDto_Tournament(dto, id);
+            tournament.TournamentId = id;
+            var result = await uow.TournamentRepository.Update(tournament);
+            await uow.CompleteAsync();
+            
+            return result.Match(
+                t => Results.Ok(mapper.Tournament_TournamentDto(t)),
+                n => Results.NotFound($"Could not find tournament with id {id}")
+            );
+        });
+
+
+        app.MapDelete("/tournaments/{id}", async (
+            int id,
+            IUoW uow
+        ) => {
+            var result = await uow.TournamentRepository.Remove(id);
+            await uow.CompleteAsync();
+            
+            return result.Match(
+                t => Results.Ok($"Tournament with id {id} deleted."),
+                n => Results.NotFound($"Could not find tournament with id {id}")
+            );
+        });
     }
 }
-
