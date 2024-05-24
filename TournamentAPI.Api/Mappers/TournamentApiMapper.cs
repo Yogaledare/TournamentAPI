@@ -8,7 +8,7 @@ public interface ITournamentApiMapper {
     GameDto Game_GameDto(Game game);
 }
 
-public class TournamentApiMapper {
+public class TournamentApiMapper : ITournamentApiMapper {
     public TournamentDto Tournament_TournamentDto(Tournament tournament) {
         return new TournamentDto(tournament.Title, tournament.StartDate);
     }
