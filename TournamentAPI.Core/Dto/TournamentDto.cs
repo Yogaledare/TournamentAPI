@@ -1,6 +1,7 @@
-﻿namespace TournamentAPI.Dto;
+﻿namespace TournamentAPI.Core.Dto;
 
 public record TournamentDto(
+    int TournamentId,
     string Title,
     DateTime StartDate
 ) {

@@ -3,18 +3,9 @@ using TournamentAPI.Core.Entities;
 using TournamentAPI.Data.Data;
 using OneOf;
 using OneOf.Types;
+using TournamentAPI.Core.Interfaces;
 
 namespace TournamentAPI.Data.Repositories;
-
-public interface ITournamentRepository {
-    Task<IEnumerable<Tournament>> GetAllAsync();
-    Task<OneOf<Tournament, NotFound>> GetAsync(int id);
-    Task<bool> AnyAsync(int id);
-    Task Add(Tournament tournament);
-    Task<OneOf<Tournament, NotFound>> Update(Tournament tournament);
-    Task<OneOf<Tournament, NotFound>> Remove(int id);
-}
-
 
 public class TournamentRepository : ITournamentRepository {
     private readonly TournamentApiContext _context;
@@ -46,8 +37,12 @@ public class TournamentRepository : ITournamentRepository {
         return result; 
     }
 
-    public async Task Add(Tournament tournament) {
-        await _context.Tournaments.AddAsync(tournament);
+    public async Task<Tournament> Add(Tournament tournament) {
+        var result = await _context.Tournaments.AddAsync(tournament);
+
+        var added = result.Entity; 
+        return added; 
+
     }
 
     public async Task<OneOf<Tournament, NotFound>> Update(Tournament tournament) {
@@ -56,9 +51,10 @@ public class TournamentRepository : ITournamentRepository {
 
         if (found == null) return new NotFound();
 
-        var updated = _context.Tournaments.Update(tournament).Entity;
-
-        return updated; 
+        found.Title = tournament.Title;
+        found.StartDate = tournament.StartDate; 
+       
+        return found; 
     }
 
     public async Task<OneOf<Tournament, NotFound>> Remove(int id) {

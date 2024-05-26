@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using TournamentAPI.Core.Interfaces;
+using TournamentAPI.Core.Mappers;
+using TournamentAPI.Core.Services;
 using TournamentAPI.Data.Data;
 using TournamentAPI.Data.Repositories;
 using TournamentAPI.Endpoints;
-using TournamentAPI.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,8 @@ builder.Services.AddScoped<ITournamentApiMapper, TournamentApiMapper>();
 builder.Services.AddScoped<IUoW, UoW>();
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>(); 
+builder.Services.AddScoped<ITournamentService, TournamentService>(); 
+
 
 // builder.Services.AddControllers().AddNewtonsoftJson(); 
 

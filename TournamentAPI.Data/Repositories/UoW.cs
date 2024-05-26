@@ -1,13 +1,8 @@
 ﻿using TournamentAPI.Core.Entities;
+using TournamentAPI.Core.Interfaces;
 using TournamentAPI.Data.Data;
 
 namespace TournamentAPI.Data.Repositories;
-
-public interface IUoW {
-    ITournamentRepository TournamentRepository { get; }
-    IGameRepository GameRepository { get; }
-    Task CompleteAsync();
-}
 
 public class UoW : IUoW {
     private readonly TournamentApiContext _context;

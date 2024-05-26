@@ -30,4 +30,8 @@
       <ProjectReference Include="..\TournamentAPI.Data\TournamentAPI.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Mappers\" />
+    </ItemGroup>
+
 </Project>
