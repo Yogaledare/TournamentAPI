@@ -18,7 +18,7 @@ builder.Services.AddScoped<ITournamentApiMapper, TournamentApiMapper>();
 builder.Services.AddScoped<IUoW, UoW>();
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>(); 
-builder.Services.AddScoped<ITournamentService, TournamentService>(); 
+builder.Services.AddScoped<IGameService, GameService>(); 
 
 
 // builder.Services.AddControllers().AddNewtonsoftJson(); 
