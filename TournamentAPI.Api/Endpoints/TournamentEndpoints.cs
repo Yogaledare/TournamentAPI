@@ -58,7 +58,7 @@ public static class TournamentEndpoints {
             var result = await service.RemoveTournamentAsync(id);
 
             return result.Match(
-                t => Results.Ok(t),
+                s => Results.NoContent(), 
                 n => Results.NotFound($"Could not find tournament with id {id}")
             ); 
         });

@@ -31,6 +31,9 @@ public class TournamentApiMapper : ITournamentApiMapper {
         }; 
     }
 
+    // public Game UpdateGameDto_Game() {
+        
+    // }
     
     
 }

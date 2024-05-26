@@ -57,13 +57,13 @@ public class TournamentRepository : ITournamentRepository {
         return found; 
     }
 
-    public async Task<OneOf<Tournament, NotFound>> Remove(int id) {
+    public async Task<OneOf<Success, NotFound>> Remove(int id) {
         var found = await _context.Tournaments
             .FirstOrDefaultAsync(t => t.TournamentId == id);
 
         if (found == null) return new NotFound();
 
         _context.Tournaments.Remove(found);
-        return found; 
+        return new Success(); 
     }
 }

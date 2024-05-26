@@ -53,11 +53,12 @@ public class TournamentService : ITournamentService {
     }
 
 
-    public async Task<OneOf<TournamentDto, NotFound>> RemoveTournamentAsync(int id) {
+    public async Task<OneOf<Success, NotFound>> RemoveTournamentAsync(int id) {
         var result = await _unitOfWork.TournamentRepository.Remove(id);
+        await _unitOfWork.CompleteAsync();
 
-        return result.Match<OneOf<TournamentDto, NotFound>>(
-            t => _mapper.Tournament_TournamentDto(t),
+        return result.Match<OneOf<Success, NotFound>>(
+            s => s, 
             n => n
         ); 
     }

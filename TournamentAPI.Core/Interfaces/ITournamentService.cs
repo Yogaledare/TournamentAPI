@@ -9,5 +9,5 @@ public interface ITournamentService {
     Task<OneOf<TournamentDto, NotFound>> GetTournamentByIdAsync(int id);
     Task<TournamentDto> CreateTournamentAsync(CreateTournamentDto createTournamentDto);
     Task<OneOf<TournamentDto, NotFound>> UpdateTournamentAsync(UpdateTournamentDto dto, int id);
-    Task<OneOf<TournamentDto, NotFound>> RemoveTournamentAsync(int id);
+    Task<OneOf<Success, NotFound>> RemoveTournamentAsync(int id);
 }

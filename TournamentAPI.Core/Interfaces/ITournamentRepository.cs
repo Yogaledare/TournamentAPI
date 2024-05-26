@@ -10,5 +10,5 @@ public interface ITournamentRepository {
     Task<bool> AnyAsync(int id);
     Task<Tournament> Add(Tournament tournament);
     Task<OneOf<Tournament, NotFound>> Update(Tournament tournament);
-    Task<OneOf<Tournament, NotFound>> Remove(int id);
+    Task<OneOf<Success, NotFound>> Remove(int id);
 }
