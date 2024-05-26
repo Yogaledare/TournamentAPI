@@ -15,12 +15,12 @@ public class GameRepository : IGameRepository {
     }
 
     public async Task<IEnumerable<Game>> GetAllAsync() {
-        var list = await _context.Games.ToListAsync();
+        var list = await _context.Games.Include(g => g.Tournament).ToListAsync();
         return list;
     }
 
     public async Task<OneOf<Game, NotFound>> GetAsync(int id) {
-        var item = await _context.Games.FirstOrDefaultAsync(t => t.GameId == id);
+        var item = await _context.Games.Include(g => g.Tournament).FirstOrDefaultAsync(t => t.GameId == id);
 
         if (item == null) {
             return new NotFound(); 
@@ -44,6 +44,7 @@ public class GameRepository : IGameRepository {
 
     public async Task<OneOf<Game, NotFound>> Update(Game game) {
         var found = await _context.Games
+            .Include(g => g.Tournament)
             .FirstOrDefaultAsync(g => g.GameId == game.GameId);
 
         if (found == null) {
@@ -59,6 +60,7 @@ public class GameRepository : IGameRepository {
 
     public async Task<OneOf<Success, NotFound>> Remove(int id) {
         var found = await _context.Games
+            .Include(g => g.Tournament)
             .FirstOrDefaultAsync(t => t.GameId == id);
 
         if (found == null) return new NotFound();

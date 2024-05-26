@@ -5,4 +5,5 @@ public class Game {
     public string Title { get; set; } = string.Empty; 
     public DateTime StartDate { get; set; }
     public int TournamentId { get; set; }
+    public Tournament Tournament { get; set; }
 }
