@@ -14,11 +14,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TournamentApiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); 
+
 builder.Services.AddScoped<ITournamentApiMapper, TournamentApiMapper>();
+
 builder.Services.AddScoped<IUoW, UoW>();
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>(); 
-builder.Services.AddScoped<IGameService, GameService>(); 
+
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<ITournamentService, TournamentService>();
 
 
 // builder.Services.AddControllers().AddNewtonsoftJson(); 
@@ -33,6 +37,7 @@ if (app.Environment.IsDevelopment()) {
 
 app.UseHttpsRedirection();
 app.MapTournamentEndpoints();
+app.MapGameEndpoints();
 
 app.Run();
 

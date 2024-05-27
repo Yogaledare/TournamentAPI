@@ -31,9 +31,14 @@ public static class GameEndpoints {
             IGameService service,
             CreateGameDto dto
         ) => {
-            var added = await service.CreateGameAsync(dto);
+            var result = await service.CreateGameAsync(dto);
 
-            return Results.Created($"/games/{added.GameId}", added);
+            return result.Match(
+                g => Results.Created($"/games/{g.GameId}", g),
+                n => Results.NotFound("Could not find the created game")
+            ); 
+            
+            // return Results.Created($"/games/{added.GameId}", added);
         });
 
 

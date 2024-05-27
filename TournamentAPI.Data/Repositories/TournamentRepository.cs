@@ -16,13 +16,17 @@ public class TournamentRepository : ITournamentRepository {
 
 
     public async Task<IEnumerable<Tournament>> GetAllAsync() {
-        var list = await _context.Tournaments.ToListAsync();
+        var list = await _context.Tournaments
+            .Include(t => t.Game)
+            .ToListAsync();
         return list;
     }
     
 
     public async Task<OneOf<Tournament, NotFound>> GetAsync(int id) {
-        var item = await _context.Tournaments.FirstOrDefaultAsync(t => t.TournamentId == id);
+        var item = await _context.Tournaments
+            .Include(t => t.Game)
+            .FirstOrDefaultAsync(t => t.TournamentId == id);
 
         if (item == null) {
             return new NotFound(); 

@@ -6,7 +6,11 @@ namespace TournamentAPI.Core.Mappers;
 
 public class TournamentApiMapper : ITournamentApiMapper {
     public TournamentDto Tournament_TournamentDto(Tournament tournament) {
-        return new TournamentDto(tournament.TournamentId, tournament.Title, tournament.StartDate);
+        return new TournamentDto(
+            tournament.TournamentId,
+            tournament.Title,
+            tournament.StartDate,
+            tournament.Game.Select(g=> Game_GameDto(g)).ToList());
     }
 
 

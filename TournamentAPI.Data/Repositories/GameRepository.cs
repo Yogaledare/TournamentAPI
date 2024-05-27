@@ -15,31 +15,36 @@ public class GameRepository : IGameRepository {
     }
 
     public async Task<IEnumerable<Game>> GetAllAsync() {
-        var list = await _context.Games.Include(g => g.Tournament).ToListAsync();
+        var list = await _context.Games
+            .Include(g => g.Tournament)
+            .ToListAsync();
         return list;
     }
 
     public async Task<OneOf<Game, NotFound>> GetAsync(int id) {
-        var item = await _context.Games.Include(g => g.Tournament).FirstOrDefaultAsync(t => t.GameId == id);
+        var item = await _context.Games
+            .Include(g => g.Tournament)
+            .FirstOrDefaultAsync(t => t.GameId == id);
 
         if (item == null) {
-            return new NotFound(); 
+            return new NotFound();
         }
 
-        return item; 
+        return item;
     }
 
     public async Task<bool> AnyAsync(int id) {
         var result = await _context.Games.AnyAsync(t => t.GameId == id);
 
-        return result; 
+        return result;
     }
 
     public async Task<Game> Add(Game game) {
-        var result = await _context.Games.AddAsync(game);
+        var result = await _context.Games
+            .AddAsync(game);
 
-        var added = result.Entity; 
-        return added; 
+        var added = result.Entity;
+        return added;
     }
 
     public async Task<OneOf<Game, NotFound>> Update(Game game) {
@@ -48,14 +53,14 @@ public class GameRepository : IGameRepository {
             .FirstOrDefaultAsync(g => g.GameId == game.GameId);
 
         if (found == null) {
-            return new NotFound(); 
+            return new NotFound();
         }
 
         found.Title = game.Title;
         found.StartDate = game.StartDate;
         found.TournamentId = game.TournamentId;
 
-        return found; 
+        return found;
     }
 
     public async Task<OneOf<Success, NotFound>> Remove(int id) {

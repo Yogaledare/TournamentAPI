@@ -32,12 +32,38 @@ public class GameService : IGameService {
     }
 
     
-    public async Task<GameDto> CreateGameAsync(CreateGameDto createGameDto) {
+    public async Task<OneOf<GameDto, NotFound>> CreateGameAsync(CreateGameDto createGameDto) {
         var game = _mapper.CreateGameDto_Game(createGameDto);
         var added = await _unitOfWork.GameRepository.Add(game);
         await _unitOfWork.CompleteAsync();
+        
+        var searchedAdded = await _unitOfWork.GameRepository.GetAsync(added.GameId);
 
-        return _mapper.Game_GameDto(added); 
+        // return new NotFound(); 
+
+        return searchedAdded.Match<OneOf<GameDto, NotFound>>(
+        g => _mapper.Game_GameDto(g),
+        n => n
+        ); 
+
+
+
+        // var result = await GetGameByIdAsync(added.GameId);
+
+        // return result; 
+
+
+        // return await GetGameByIdAsync(added.GameId); 
+
+        // var result = searchedAdded.Match<GameDto, NotFound>(
+        // g => _mapper.Game_GameDto(g),
+        // n => n
+        // ); 
+
+        // return searchedAdded.Match<GameDto, NotFound>(
+        // g => _mapper.Game_GameDto(g), 
+        // n => n
+        // ); 
     }
 
     

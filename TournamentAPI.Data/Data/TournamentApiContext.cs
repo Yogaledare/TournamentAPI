@@ -19,5 +19,12 @@ public class TournamentApiContext : DbContext {
             .HasForeignKey(g => g.TournamentId)  // Foreign key in Game pointing to Tournament
             .IsRequired();  // Indicates that TournamentId is a required field
 
+        
+        
+        // modelBuilder.Entity<Tournament>()
+        //     .HasMany(t => t.Game)
+        //     .WithOne()
+        //     .HasForeignKey(g => g.TournamentId);  // Assuming `TournamentId` is your FK in `Game`
+
     }
 }
